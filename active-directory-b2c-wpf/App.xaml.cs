@@ -18,14 +18,14 @@ namespace active_directory_b2c_wpf
         /// <summary>
         /// B2C tenant name
         /// </summary>
-        private static readonly string TenantName = "fabrikamb2c";
+        private static readonly string TenantName = "RPMCloudB2C";
         private static readonly string Tenant = $"{TenantName}.onmicrosoft.com";
         private static readonly string AzureAdB2CHostname = $"{TenantName}.b2clogin.com";
 
         /// <summary>
         /// ClientId for the application which initiates the login functionality (this app)  
         /// </summary>
-        private static readonly string ClientId = "841e1190-d73a-450c-9d68-f5cf16b78e81";
+        private static readonly string ClientId = "fca7791c-e0e0-44b3-82b6-b6c10095cc51";
 
         /// <summary>
         /// Should be one of the choices on the Azure AD B2c / [This App] / Authentication blade
@@ -35,7 +35,8 @@ namespace active_directory_b2c_wpf
         /// <summary>
         /// From Azure AD B2C / UserFlows blade
         /// </summary>
-        public static string PolicySignUpSignIn = "b2c_1_susi";
+        //public static string PolicySignUpSignIn = "B2C_1A_SMART_HRD_SUSI";
+        public static string PolicySignUpSignIn = "B2C_1A_SIGNIN_RPM";
         public static string PolicyEditProfile = "b2c_1_edit_profile";
         public static string PolicyResetPassword = "b2c_1_reset";
 
@@ -46,12 +47,12 @@ namespace active_directory_b2c_wpf
         /// 2nd: Azure AD B2C / App registrations / [This App] / API Permissions / Add a permission / My APIs / [API App] / Select & Add Permissions
         /// 3rd: Azure AD B2C / App registrations / [This App] / API Permissions / ... (next to add a permission) / Grant Admin Consent for [tenant]
         /// </summary>
-        public static string[] ApiScopes = { $"https://{Tenant}/helloapi/demo.read" };
+        public static string[] ApiScopes = { "https://RPMCloudB2C.onmicrosoft.com/30dd4b43-a8e3-4c40-9b26-b53945a590da/user_impersonation" };
 
         /// <summary>
         /// URL for API which will receive the bearer token corresponding to this authentication
         /// </summary>
-        public static string ApiEndpoint = "https://fabrikamb2chello.azurewebsites.net/hello";
+        public static string ApiEndpoint = "https://jwt.ms";
 
         // Shouldn't need to change these:
         private static string AuthorityBase = $"https://{AzureAdB2CHostname}/tfp/{Tenant}/";

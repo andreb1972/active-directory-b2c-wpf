@@ -13,6 +13,7 @@ using System.Windows;
 using System.Windows.Interop;
 using Newtonsoft.Json.Linq;
 using System.Text;
+using System.Collections.ObjectModel;
 
 namespace active_directory_b2c_wpf
 {
@@ -24,6 +25,7 @@ namespace active_directory_b2c_wpf
         public MainWindow()
         {
             InitializeComponent();
+      
         }
 
         private async void SignInButton_Click(object sender, RoutedEventArgs e)
@@ -34,7 +36,7 @@ namespace active_directory_b2c_wpf
             {
                 ResultText.Text = "";
                 authResult = await app.AcquireTokenInteractive(App.ApiScopes)
-                    .WithParentActivityOrWindow(new WindowInteropHelper(this).Handle)                    
+                    .WithParentActivityOrWindow(new WindowInteropHelper(this).Handle)
                     .ExecuteAsync();
 
                 DisplayUserInfo(authResult);
@@ -66,9 +68,12 @@ namespace active_directory_b2c_wpf
             {
                 ResultText.Text = $"Error Acquiring Token:{Environment.NewLine}{ex}";
             }
-
             DisplayUserInfo(authResult);
         }
+
+
+
+
 
         private async void EditProfileButton_Click(object sender, RoutedEventArgs e)
         {
@@ -90,6 +95,7 @@ namespace active_directory_b2c_wpf
                 ResultText.Text = $"Session has expired, please sign out and back in.{App.AuthorityEditProfile}{Environment.NewLine}{ex}";
             }
         }
+
 
         private async void CallApiButton_Click(object sender, RoutedEventArgs e)
         {
@@ -181,7 +187,7 @@ namespace active_directory_b2c_wpf
                 ResultText.Text = $"Error signing-out user: {ex.Message}";
             }
         }
-
+    
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             try
@@ -210,8 +216,8 @@ namespace active_directory_b2c_wpf
         {
             if (signedIn)
             {
-                CallApiButton.Visibility = Visibility.Visible;
-                EditProfileButton.Visibility = Visibility.Visible;
+                CallApiButton.Visibility = Visibility.Collapsed;
+                EditProfileButton.Visibility = Visibility.Collapsed;
                 SignOutButton.Visibility = Visibility.Visible;
 
                 SignInButton.Visibility = Visibility.Collapsed;
@@ -229,6 +235,14 @@ namespace active_directory_b2c_wpf
             }
         }
 
+        public class ProfileSelection
+        {
+            public int Value { get; set; }
+            public string DisplayValue { get; set; }
+        }
+
+      
+
         private void DisplayUserInfo(AuthenticationResult authResult)
         {
             if (authResult != null)
@@ -236,19 +250,22 @@ namespace active_directory_b2c_wpf
                 JObject user = ParseIdToken(authResult.IdToken);
 
                 TokenInfoText.Text = "";
-                TokenInfoText.Text += $"Name: {user["name"]?.ToString()}" + Environment.NewLine;
-                TokenInfoText.Text += $"User Identifier: {user["oid"]?.ToString()}" + Environment.NewLine;
-                TokenInfoText.Text += $"Street Address: {user["streetAddress"]?.ToString()}" + Environment.NewLine;
-                TokenInfoText.Text += $"City: {user["city"]?.ToString()}" + Environment.NewLine;
-                TokenInfoText.Text += $"State: {user["state"]?.ToString()}" + Environment.NewLine;
-                TokenInfoText.Text += $"Country: {user["country"]?.ToString()}" + Environment.NewLine;
-                TokenInfoText.Text += $"Job Title: {user["jobTitle"]?.ToString()}" + Environment.NewLine;
+                //TokenInfoText.Text += $"Name: {user["name"]?.ToString()}" + Environment.NewLine ;
+                //TokenInfoText.Text += $"User Identifier: {user["oid"]?.ToString()}" + Environment.NewLine;
+                //if (user["emails"] is JArray emails)
+                //{
+                //    TokenInfoText.Text += $"Emails: {emails[0].ToString()}" + Environment.NewLine;
+                //}
+                //TokenInfoText.Text += $"Identity Provider: {user["iss"]?.ToString()}" + Environment.NewLine;
+                //TokenInfoText.Text += "===========" + Environment.NewLine;
+                //TokenInfoText.Text += "  Token " + Environment.NewLine;
+                //TokenInfoText.Text += "===========" + Environment.NewLine;
+                TokenInfoText.Text += $"{user.ToString()}";
 
-                if (user["emails"] is JArray emails)
-                {
-                    TokenInfoText.Text += $"Emails: {emails[0].ToString()}" + Environment.NewLine;
-                }
-                TokenInfoText.Text += $"Identity Provider: {user["iss"]?.ToString()}" + Environment.NewLine;
+
+
+
+
             }
         }
 
